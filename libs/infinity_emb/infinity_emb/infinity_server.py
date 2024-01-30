@@ -88,6 +88,7 @@ def create_server(
     async def _shutdown():
         await app.model.astop()
 
+    @app.get("/ping")
     @app.get("/ready")
     async def _ready() -> float:
         """
@@ -116,6 +117,11 @@ def create_server(
             )
         )
 
+    @app.post(
+        f"/invocations",
+        response_model=OpenAIEmbeddingResult,
+        response_class=responses.ORJSONResponse,
+    )
     @app.post(
         f"{url_prefix}/embeddings",
         response_model=OpenAIEmbeddingResult,
